@@ -13,7 +13,7 @@ The most common application is to offload boring and copy-paste security constra
 * 
 
 ```go
-import "github.com/theirish/echosec"
+import "github.com/theirish81/echosec"
 
 /*...*/
 
