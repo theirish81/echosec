@@ -3,9 +3,11 @@ package echosec
 import "strings"
 
 // Config is the middleware configuration.
+// BasePath a baseURL to apply to each PathItem to simplify and cleanup mappings
 // PathMapping contains a list of validation functions, grouped by path and method.
 // DefaultValidation is the default validation action taken if no mapping is matched
 type Config struct {
+	BasePath          string
 	PathMapping       PathItems
 	DefaultValidation ValidationFunc
 }
@@ -30,9 +32,9 @@ type Patterns []string
 type ValidationMap map[string]ValidationFunc
 
 // MatchPattern will return true if a path pattern matches the provided path
-func (i PathItem) MatchPattern(path string) bool {
+func (i PathItem) MatchPattern(path string, basePath string) bool {
 	for _, p := range i.Patterns {
-		if p == path {
+		if basePath+p == path {
 			return true
 		}
 	}

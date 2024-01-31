@@ -15,12 +15,14 @@ func TestPathItem_MatchPattern(t *testing.T) {
 			Patterns: Patterns{"/foo/bar", "/a/b/c"},
 		},
 	}
-	assert.True(t, items[0].MatchPattern("/user/:id"))
-	assert.False(t, items[0].MatchPattern("/user/abc"))
+	assert.True(t, items[0].MatchPattern("/user/:id", ""))
+	assert.False(t, items[0].MatchPattern("/user/abc", ""))
 
-	assert.True(t, items[1].MatchPattern("/foo/bar"))
-	assert.True(t, items[1].MatchPattern("/a/b/c"))
-	assert.False(t, items[1].MatchPattern("/a/b/c/d"))
+	assert.True(t, items[1].MatchPattern("/foo/bar", ""))
+	assert.True(t, items[1].MatchPattern("/a/b/c", ""))
+	assert.False(t, items[1].MatchPattern("/a/b/c/d", ""))
+
+	assert.True(t, items[0].MatchPattern("/api/user/:id", "/api"))
 }
 
 func TestPathItem_FindMethodValidator(t *testing.T) {

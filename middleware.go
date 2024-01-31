@@ -11,7 +11,7 @@ func Middleware(cfg Config) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			for _, p := range cfg.PathMapping {
-				if p.MatchPattern(c.Path()) {
+				if p.MatchPattern(c.Path(), cfg.BasePath) {
 					if validator := p.FindMethodValidator(c.Request().Method); validator != nil {
 						if err := validator(c); err != nil {
 							return err
