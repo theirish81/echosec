@@ -9,7 +9,7 @@ import (
 )
 
 func TestMiddleware(t *testing.T) {
-	m := Middleware(Config{
+	m := WithManualConfig(ManualConfig{
 		PathMapping: PathItems{
 			{
 				Patterns: Patterns{"/foo", "/bar"},
