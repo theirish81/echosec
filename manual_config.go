@@ -2,11 +2,11 @@ package echosec
 
 import "strings"
 
-// Config is the middleware configuration.
+// ManualConfig is the middleware configuration.
 // BasePath a baseURL to apply to each PathItem to simplify and cleanup mappings
 // PathMapping contains a list of validation functions, grouped by path and method.
 // DefaultValidation is the default validation action taken if no mapping is matched
-type Config struct {
+type ManualConfig struct {
 	BasePath          string
 	PathMapping       PathItems
 	DefaultValidation ValidationFunc
