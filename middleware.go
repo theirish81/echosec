@@ -6,11 +6,11 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-// ValidationFunc is any function meant to validate access to a path or method
-type ValidationFunc func(c echo.Context) error
-
+// OApiValidationFunc is a function meant to validate whether the requesting entity has the permission to access
+// a certain resource
 type OApiValidationFunc func(c echo.Context, params []string) error
 
+// WithOpenApiConfig creates an echo.MiddlewareFunc function given an OApiConfig object
 func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {

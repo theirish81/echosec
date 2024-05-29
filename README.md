@@ -1,8 +1,8 @@
 # EchoSec
 A Golang middleware for the [Labstack Echo Server](https://echo.labstack.com/) that simplifies the process of describing
-the prerequisites for a request to access combinations of endpoints and methods, using a combination of OpenAPI 
-specification files and Go code. The most common application is to offload boring and copy-paste security constraints
-to a middleware.
+the prerequisites for a request to access combinations of endpoints and methods, using an OpenAPI extension to direct
+the routing and Go code to determine the rules. The most common application is to offload boring and copy-paste
+security constraints to a middleware.
 
 **I.e.** *Can a user with a given JWT token perform `DELETE /user/:id`?*
 
@@ -35,9 +35,9 @@ sub-behaviors.
     post:
         operationId: computeWorkspaceOrganizations
         x-echosec:
-        function: workspace_user_read
-        params:
-          - premium
+          function: workspace_user_read
+          params:
+            - premium
 ```
 In this example, the main behavior is `workspace_user_read`, however, we further specify the `premium` param so that
 the function knows there's a sub-behavior (premium) to be taken into account.
@@ -71,7 +71,7 @@ cfg, _ := echosec.NewOApiConfig(openApiBytes, map[string]echosec.OApiValidationF
 ```
 So as you can se we're mapping the OpenAPI `x-echosec.function` items to actual go functions. If the user is allowed
 to perform a certain action, we return `nil`. If the user is not, then we return the appropriate error.
-The `openApiBytes` argument is an serialized OpenAPI file. 
+The `openApiBytes` argument is an serialized OpenAPI file. It can either be plain text or GZipped.
 
 ## Wiring all together
 It's pretty simple as it works like any other Echo Framework middlewares.
