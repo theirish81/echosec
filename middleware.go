@@ -11,37 +11,6 @@ type ValidationFunc func(c echo.Context) error
 
 type OApiValidationFunc func(c echo.Context, params []string) error
 
-// WithManualConfig returns an echo.MiddlewareFunc for the echo server
-// cfg is the ManualConfig of the middleware
-func WithManualConfig(cfg ManualConfig) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			for _, p := range cfg.PathMapping {
-				if p.MatchPattern(c.Path(), cfg.BasePath) {
-					if validator := p.FindMethodValidator(c.Request().Method); validator != nil {
-						if err := validator(c); err != nil {
-							return err
-						}
-						return next(c)
-					}
-					if p.PathValidation != nil {
-						if err := p.PathValidation(c); err != nil {
-							return err
-						}
-						return next(c)
-					}
-				}
-			}
-			if cfg.DefaultValidation != nil {
-				if err := cfg.DefaultValidation(c); err != nil {
-					return err
-				}
-			}
-			return next(c)
-		}
-	}
-}
-
 func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
