@@ -1,7 +1,9 @@
 package echosec
 
 import (
+	"context"
 	"errors"
+	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/labstack/echo/v4"
 	"github.com/mitchellh/mapstructure"
 )
@@ -14,7 +16,7 @@ type OApiValidationFunc func(c echo.Context, params []string) error
 func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			route, _, err := cfg.router.FindRoute(c.Request())
+			route, pathParams, err := cfg.router.FindRoute(c.Request())
 			if err != nil {
 				return err
 			}
@@ -35,6 +37,24 @@ func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 			err = f(c, params)
 			if err != nil {
 				return err
+			}
+			if cfg.openApiValidationEnabled {
+				requestValidationInput := &openapi3filter.RequestValidationInput{
+					Request:    c.Request(),
+					PathParams: pathParams,
+					Route:      route,
+					Options: &openapi3filter.Options{
+						AuthenticationFunc: func(ctx context.Context, input *openapi3filter.AuthenticationInput) error {
+							return nil
+						},
+					},
+				}
+				c.Set("requestValidationInput", requestValidationInput)
+				err = openapi3filter.ValidateRequest(c.Request().Context(), requestValidationInput)
+				if err != nil {
+					return err
+				}
+				return next(c)
 			}
 			return next(c)
 		}
