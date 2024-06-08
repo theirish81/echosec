@@ -16,6 +16,7 @@ const openapiB64 = "b3BlbmFwaTogMy4wLjEKaW5mbzoKICB0aXRsZTogVGVzdAogIHZlcnNpb246
 const openapiGzipped = "H4sIAAAAAAAAA3VRMW7DMAzc/QoiuyOnXQKNXYru3QtVpmMVjsRQVFD/vpJjJErabtLx7ngkA6E35DQ8b7vtrnF+CLoBECcTanjHKPl3Ro4ueA3nXRORy7eQAFpIPGkYRUgrNQVrpjFE0ftu36lsq7KgISPjwt8oG46UBNWBQ6K4uZhQUSwvgEDIRnKvt17Dyn5dyCuBDJsjSkkAK1Ri+AxqGEK4YgAuBz4l5LnCGE/JMWZz4YRVIdoRj0ZXSF7CTNk0Cjt/aG76vJOX0M83rg1e0EstNkSTs8sk6ivm1d0Z/9WsyvaAt/Bp+AEjLpsSh/GRDYX9G/xnmkjBx9rkqetqcY/RsiNZrn+5GlhGI9ivrO8Wbb452ptsSN5eFH34iJKG4VpazneXuc222W9FfgBdLMjrjwIAAA=="
 
 func TestWithOpenApiConfig(t *testing.T) {
+
 	cfg, err := NewOApiConfig([]byte(openapi), map[string]OApiValidationFunc{
 		"do_stuff": func(c echo.Context, params []string) error {
 			c.Set("caught", true)

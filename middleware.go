@@ -49,7 +49,7 @@ func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 						},
 					},
 				}
-				c.Set("requestValidationInput", requestValidationInput)
+				c.Set(requestValidationInputAttr, requestValidationInput)
 				err = openapi3filter.ValidateRequest(c.Request().Context(), requestValidationInput)
 				if err != nil {
 					return err
