@@ -15,7 +15,7 @@ type mockResponseWriter struct {
 func (w *mockResponseWriter) Header() http.Header {
 	return http.Header{}
 }
-func (w *mockResponseWriter) WriteHeader(statusCode int) {
+func (w *mockResponseWriter) WriteHeader(_ int) {
 
 }
 func (w *mockResponseWriter) Write([]byte) (int, error) {
@@ -38,7 +38,8 @@ func TestSecBlob(t *testing.T) {
 	e := echo.New()
 	req, _ := http.NewRequest("POST", "http://localhost:8080/api/v1/compute/groups?foo=bar", nil)
 	ctx := e.NewContext(req, nil)
-	ctx.SetResponse(echo.NewResponse(&mockResponseWriter{}, e))
+	res := echo.NewResponse(&mockResponseWriter{}, e)
+	ctx.SetResponse(res)
 	err = f(ctx)
 	if err != nil {
 		t.Error(err)

@@ -17,6 +17,12 @@ func SecBlob(ctx echo.Context, status int, dto any) error {
 	default:
 		data, _ = json.Marshal(dto)
 	}
+	headers := ctx.Response().Header()
+	if headers.Get(contentTypeHeaderName) == "" {
+		headers.Set(contentTypeHeaderName, contentTypeJsonValue)
+		ctx.Response().Header().Set(contentTypeHeaderName, contentTypeJsonValue)
+	}
+
 	rvi, ok := ctx.Get(requestValidationInputAttr).(*openapi3filter.RequestValidationInput)
 	h := http.Header{}
 	h.Set(contentTypeHeaderName, contentTypeJsonValue)
@@ -24,7 +30,7 @@ func SecBlob(ctx echo.Context, status int, dto any) error {
 		responseValidationInput := &openapi3filter.ResponseValidationInput{
 			RequestValidationInput: rvi,
 			Status:                 status,
-			Header:                 h,
+			Header:                 headers,
 		}
 		responseValidationInput.SetBodyBytes(data)
 		err := openapi3filter.ValidateResponse(ctx.Request().Context(), responseValidationInput)
