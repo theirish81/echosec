@@ -13,17 +13,18 @@ import (
 
 // OApiConfig is configuration for EchoSec
 type OApiConfig struct {
-	basePath   *string
-	openapi    []byte
-	router     routers.Router
-	doc        *openapi3.T
-	validators map[string]OApiValidationFunc
+	basePath                 *string
+	openapi                  []byte
+	router                   routers.Router
+	doc                      *openapi3.T
+	validators               map[string]OApiValidationFunc
+	openApiValidationEnabled bool
 }
 
 // NewOApiConfig is a constructor for an EchoSec config.
-// openapi can be an OpenAPI definition, either plain text of compressed
-func NewOApiConfig(openapi []byte, validators map[string]OApiValidationFunc) (OApiConfig, error) {
-	cfg := OApiConfig{validators: validators}
+// openapiB64 can be an OpenAPI definition, either plain text of compressed
+func NewOApiConfig(openapi []byte, validators map[string]OApiValidationFunc, oapiValidationEnabled bool) (OApiConfig, error) {
+	cfg := OApiConfig{validators: validators, openApiValidationEnabled: oapiValidationEnabled}
 	loader := openapi3.Loader{Context: context.Background()}
 	oApiBytes := make([]byte, 0)
 
