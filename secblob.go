@@ -6,6 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// SecBlob validates whether the provided dto matches the output expected by OpenAPI specification.
+// For this to work, validation of the input must also be enabled
 func SecBlob(ctx echo.Context, status int, dto any) error {
 	var data []byte
 	switch t := dto.(type) {
