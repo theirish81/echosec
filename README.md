@@ -46,32 +46,54 @@ the function knows there's a sub-behavior (premium) to be taken into account.
 We first set up our configuration as in:
 ```go
 cfg, _ := echosec.NewOApiConfig(openApiBytes, map[string]echosec.OApiValidationFunc{
-    // all the functions mentioned in this snippet, such as 'getClaims' are fictitious and presented to 
-    // offer an example that you can relate to.
-    "can_admin_user": func(c echo.Context, params []string) error {
-        if GetClaims(c).CanAdminUserData(c.Param("userId")) {
-            return nil
-        }
-        return errors.NewForbiddenError()
-    },
-    "workspace_user_read": func(ctx echo.Context, params []string) error {
-        claims := GetClaims(ctx)
-        if claims.Admin {
-            return nil
-        }
-        if slices.Contains(params, "premium") && !claims.IsPremiumWorkspace(ctx.Param("workspaceId")) {
+        // all the functions mentioned in this snippet, such as 'getClaims' are fictitious and presented to 
+        // offer an example that you can relate to.
+        "can_admin_user": func(c echo.Context, params []string) error {
+            if GetClaims(c).CanAdminUserData(c.Param("userId")) {
+                return nil
+            }
             return errors.NewForbiddenError()
-        }
-        if claims.CanAccessWorkspace(ctx.Param("workspaceId")) {
-            return nil
-        }
-        return errors.NewForbiddenError()
-    },
-}
+        },
+        "workspace_user_read": func(ctx echo.Context, params []string) error {
+            claims := GetClaims(ctx)
+            if claims.Admin {
+                return nil
+            }
+            if slices.Contains(params, "premium") && !claims.IsPremiumWorkspace(ctx.Param("workspaceId")) {
+                return errors.NewForbiddenError()
+            }
+            if claims.CanAccessWorkspace(ctx.Param("workspaceId")) {
+                return nil
+            }
+            return errors.NewForbiddenError()
+        },
+    }, true)
 ```
-So as you can se we're mapping the OpenAPI `x-echosec.function` items to actual go functions. If the user is allowed
+So as you can see we're mapping the OpenAPI `x-echosec.function` items to actual go functions. If the user is allowed
 to perform a certain action, we return `nil`. If the user is not, then we return the appropriate error.
 The `openApiBytes` argument is an serialized OpenAPI file. It can either be plain text or GZipped.
+
+The last boolean parameter, in our example set to `true`, enables **request validation** against the OpenAPI
+specification. If set, in case of a broken request, the system will stop the request and error out even before
+the access validation.
+
+
+## Response validation
+Optionally, you can validate your response against the OpenAPI specification. The main use of this is making sure
+your responses are always complying with the spec.
+That said, for this to work **you will need to enable request validation as well**.
+
+To validate your response, use our `SecBlob` function to issue your response (instead of `ctx.JSON` or `ctx.Blob`),
+as in:
+```go
+echosec.SecBlob(ctx, http.StatusOK, map[string]any{
+		"a": "foobar",
+		"b": 1,
+	})
+```
+The first parameter is the Echo Framework context, the second is the status code, and the third is the payload.
+The payload can be an object instance, a string, or a slice of bytes. If the response doesn't match the specification,
+then an error will be returned.
 
 ## Wiring all together
 It's pretty simple as it works like any other Echo Framework middlewares.
