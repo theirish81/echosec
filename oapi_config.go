@@ -19,6 +19,7 @@ type OApiConfig struct {
 	doc                      *openapi3.T
 	validators               map[string]OApiValidationFunc
 	openApiValidationEnabled bool
+	vars                     []string
 }
 
 // NewOApiConfig is a constructor for an EchoSec config.
@@ -54,9 +55,31 @@ func NewOApiConfig(openapi []byte, validators map[string]OApiValidationFunc, oap
 	return cfg, err
 }
 
+// WithVars sets a list of variables that can be found in the EchoSec context and may be handy during label condition
+// evaluation
+func (c *OApiConfig) WithVars(vars ...string) {
+	c.vars = vars
+}
+
+// OApiEchoSec is the route EchoSec configuration
 type OApiEchoSec struct {
 	Function string   `yaml:"function"`
 	Params   []string `yaml:"params"`
+	Labels   []Label  `yaml:"labels"`
+}
+
+// EchoSecContext is the object containing key echosec information, such as the configuration that has been
+// picked up, and the dynamic labels
+type EchoSecContext struct {
+	Config OApiEchoSec
+	Labels []string
+}
+
+// Label is the configuration of one dynamic label, containing the label itself and the expr condition that
+// activates the label
+type Label struct {
+	Condition string `yaml:"expression"`
+	Label     string `yaml:"label"`
 }
 
 func isGzipped(b []byte) bool {
