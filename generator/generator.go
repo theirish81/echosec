@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"unicode"
 )
 
 var templ = `package {{.PackageName}}
@@ -40,7 +41,7 @@ func main() {
 				var localConfig echosec.OApiEchoSec
 				err = mapstructure.Decode(extension, &localConfig)
 				for _, l := range localConfig.Labels {
-					labels[snakeToCamel(l.Label)] = l.Label
+					labels[SnakeToCamel(l.Label)] = l.Label
 				}
 			}
 		}
@@ -58,12 +59,25 @@ func main() {
 
 }
 
-func snakeToCamel(s string) string {
+func SnakeToCamel(s string) string {
+	if !strings.Contains(s, "_") {
+		// If it's not snake_case, just capitalize the first rune
+		runes := []rune(s)
+		if len(runes) == 0 {
+			return s
+		}
+		runes[0] = unicode.ToUpper(runes[0])
+		return string(runes)
+	}
+
 	parts := strings.Split(s, "_")
 	for i, part := range parts {
-		if len(part) > 0 {
-			parts[i] = strings.ToUpper(part[:1]) + strings.ToLower(part[1:])
+		if part == "" {
+			continue
 		}
+		runes := []rune(part)
+		runes[0] = unicode.ToUpper(runes[0])
+		parts[i] = string(runes)
 	}
 	return strings.Join(parts, "")
 }

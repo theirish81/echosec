@@ -34,7 +34,7 @@ func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 				return errors.New("validator function not found")
 			}
 			ectx := EchoSecContext{Config: localConfig}
-			setDoubleContext(c, echosecContextAttr, ectx)
+			setDoubleContext(c, EchosecContextAttr, ectx)
 			params := localConfig.Params
 			if params == nil {
 				params = make([]string, 0)
@@ -48,7 +48,7 @@ func WithOpenApiConfig(cfg OApiConfig) echo.MiddlewareFunc {
 				return err
 			}
 			ectx.Labels = labels
-			setDoubleContext(c, echosecContextAttr, ectx)
+			setDoubleContext(c, EchosecContextAttr, ectx)
 
 			if cfg.openApiValidationEnabled {
 				requestValidationInput := &openapi3filter.RequestValidationInput{

@@ -149,6 +149,6 @@ func TestWithOpenApiConfigLabels(t *testing.T) {
 	ctx.Set("foo", "bar")
 	err = f(ctx)
 	assert.Nil(t, err)
-	assert.Equal(t, "foo1", ctx.Get(echosecContextAttr).(EchoSecContext).Labels[0])
-	assert.Equal(t, "foo2", ctx.Get(echosecContextAttr).(EchoSecContext).Labels[1])
+	assert.Equal(t, "foo1", ctx.Get(EchosecContextAttr).(EchoSecContext).Labels[0])
+	assert.Equal(t, "foo2", ctx.Get(EchosecContextAttr).(EchoSecContext).Labels[1])
 }
