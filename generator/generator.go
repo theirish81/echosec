@@ -12,7 +12,7 @@ import (
 	"text/template"
 )
 
-var templ = ` package {{.PackageName}}
+var templ = `package {{.PackageName}}
 
 // Generated code. DO NOT EDIT!
 // These are the labels found in the OpenAPI document
