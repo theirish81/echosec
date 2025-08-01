@@ -10,7 +10,7 @@ import (
 func GetEchoSecContext(ctx any) (*EchoSecContext, error) {
 	switch c := ctx.(type) {
 	case context.Context:
-		cx := c.Value("claims")
+		cx := c.Value(EchosecContextAttr)
 		if cy, ok := cx.(EchoSecContext); ok {
 			return &cy, nil
 		}
