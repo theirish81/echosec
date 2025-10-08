@@ -1,17 +1,18 @@
 module github.com/theirish81/echosec
 
-go 1.23.11
+go 1.24.8
+
 
 require (
-	github.com/getkin/kin-openapi v0.132.0
+	github.com/expr-lang/expr v1.17.6
+	github.com/getkin/kin-openapi v0.133.0
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/expr-lang/expr v1.17.5 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
@@ -27,9 +28,10 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	github.com/woodsbury/decimal128 v1.3.0 // indirect
+	golang.org/x/crypto v0.43.0 // indirect
+	golang.org/x/net v0.45.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
